@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  Superadmin
+  Admin
+  Manager
+  Karyawan
+}
+
+enum JenisKelamin {
+  Laki_laki
+  Perempuan
+}
+
+enum Status {
+  Active
+  Resigned
+  Terminated
+}
+
+enum EmploymentType {
+  Tetap
+  Kontrak
+  Internship
+}
+
+enum StatusPernikahan {
+  Sudah_menikah
+  Belum_menikah
+  Cerai_mati
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  username String @db.VarChar(155)
+  email String @unique @db.VarChar(155)
+  password String  
+  role Role
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Departments {
+  id Int @id @default(autoincrement())
+  code String @db.VarChar(100)
+  name String @db.VarChar(155)
+
+  positions Positions[]
+  employees Employees[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Positions {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(155)
+  level String
+  departments Departments @relation(fields: [departmentId], references: [id])
+  departmentId Int 
+
+  employees Employees[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Employees {
+  id Int @id @default(autoincrement())
+  nip String @unique @db.VarChar(155)
+  full_name String @db.VarChar(155)
+
+  nik String @db.VarChar(155)
+  jenis_kelamin JenisKelamin
+
+  birth_place String @db.VarChar(155)
+  birth_Date DateTime
+
+  phone String @db.VarChar(155)
+  address String @db.Text
+
+  statusPernikahan StatusPernikahan
+
+  agama String @db.VarChar(155)
+
+  join_date DateTime
+
+  departments Departments @relation(fields: [departmentId], references: [id])
+  departmentId Int
+
+  position_id Int
+  positions Positions @relation(fields: [position_id], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
