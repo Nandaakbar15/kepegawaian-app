@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Download } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -20,7 +19,9 @@ import {
 } from "@/components/ui/table";
 
 import type { Positions } from "@/src/types/Position";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import Modal from "@/components/Modal";
 
 export default function PositionsData() {
   const [activeNav, setActiveNav] = useState("Overview");
@@ -34,6 +35,10 @@ export default function PositionsData() {
   });
 
   const [positions, setPositions] = useState<Positions[]>([]);
+
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const fetchPositions = async (page: number = 1) => {
     try {
@@ -55,6 +60,24 @@ export default function PositionsData() {
     fetchPositions();
   }, []);
 
+  const deletePositions = async (id: number) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/api/v1/deletePosition/${id}`,
+      );
+
+      setShowModal(true);
+      setMessage(res.data.message);
+
+      setTimeout(() => {
+        setShowModal(false);
+        navigate("/data_posisi");
+      }, 2000);
+    } catch (error) {
+      console.error("Error : ", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f7f8fb] text-slate-900">
       <Sidebar
@@ -64,7 +87,7 @@ export default function PositionsData() {
         setMobileNavOpen={setMobileNavOpen}
       />
 
-      <main className="min-h-screen md:pl-[248px]">
+      <main className="min-h-screen md:pl-62">
         <Header
           search={search}
           setSearch={setSearch}
@@ -73,8 +96,11 @@ export default function PositionsData() {
           setNotificationsOpen={setNotificationsOpen}
         />
 
-        <div className="mx-auto max-w-[1520px] px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
+        <div className="mx-auto max-w-380 px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
           <section className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <p className="text-center text-gray-700">{message}</p>
+            </Modal>
             <div>
               <h2 className="text-[29px] font-extrabold tracking-[-0.055em] text-slate-950 sm:text-[34px]">
                 Data Posisi
@@ -140,13 +166,16 @@ export default function PositionsData() {
                         </TableCell>
                         <TableCell className="border border-gray-300 space-x-2 px-4 py-2">
                           <Link
-                            to={`/edit_departments/${data.id}`}
+                            to={`/edit_position/${data.id}`}
                             className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
                           >
                             Edit
                           </Link>
 
-                          <button className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700">
+                          <button
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700"
+                            onClick={() => deletePositions(data.id)}
+                          >
                             Delete
                           </button>
                         </TableCell>

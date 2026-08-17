@@ -7,6 +7,10 @@ import PositionsData from "./pages/Dashboard/PositionsData/IndexPositionsData";
 import AddDepartments from "./pages/Dashboard/DepartmentsData/AddDepartments";
 import AddPosition from "./pages/Dashboard/PositionsData/AddPosition";
 import EmployeeData from "./pages/Dashboard/EmployeeData/IndexEmployeeData";
+import AddEmployee from "./pages/Dashboard/EmployeeData/AddEmployee";
+import EditDepartments from "./pages/Dashboard/DepartmentsData/EditDepartments";
+import EditPosition from "./pages/Dashboard/PositionsData/EditPosition";
+import EditEmployee from "./pages/Dashboard/EmployeeData/EditEmployee";
 
 export default function App() {
   return (
@@ -18,14 +22,17 @@ export default function App() {
         {/* Routes departments */}
         <Route path="/data_departemen" element={<DepartementData />} />
         <Route path="/tambah_departemen" element={<AddDepartments />} />
-        <Route path="/edit_departemen/:id" />
+        <Route path="/edit_departments/:id" element={<EditDepartments />} />
 
         {/* Routes position */}
         <Route path="/data_posisi" element={<PositionsData />} />
         <Route path="/tambah_posisi" element={<AddPosition />} />
+        <Route path="/edit_position/:id" element={<EditPosition />} />
 
         {/* Routes employee */}
         <Route path="/data_pegawai" element={<EmployeeData />} />
+        <Route path="/tambah_pegawai" element={<AddEmployee />} />
+        <Route path="/edit_pegawai/:id" element={<EditEmployee />} />
       </Routes>
     </BrowserRouter>
   );

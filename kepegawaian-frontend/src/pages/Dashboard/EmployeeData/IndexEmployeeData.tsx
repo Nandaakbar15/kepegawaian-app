@@ -21,7 +21,9 @@ import {
 } from "@/components/ui/table";
 
 import type { Employee } from "@/src/types/Employee";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import Modal from "@/components/Modal";
 
 export default function EmployeeData() {
   const [activeNav, setActiveNav] = useState("Overview");
@@ -36,6 +38,11 @@ export default function EmployeeData() {
     last_page: 1,
   });
 
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const navigate = useNavigate();
+
   const fetchEmployee = async (page: number = 1) => {
     try {
       const res = await axios.get(
@@ -49,6 +56,29 @@ export default function EmployeeData() {
       });
     } catch (error) {
       console.error("Error : ", error);
+    }
+  };
+
+  const deleteEmployee = async (id: number) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/api/v1/deleteEmployee/${id}`,
+      );
+
+      setShowModal(true);
+      setMessage(res.data.message);
+
+      setTimeout(() => {
+        setShowModal(false);
+        navigate("/data_pegawai");
+      }, 2000);
+
+      // refresh the data
+      fetchEmployee();
+    } catch (error) {
+      console.error("Error : ", error);
+      setShowModal(true);
+      setMessage("Error, failed to delete the data!");
     }
   };
 
@@ -76,6 +106,9 @@ export default function EmployeeData() {
 
         <div className="mx-auto max-w-[1520px] px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
           <section className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <p className="text-center text-gray-700">{message}</p>
+            </Modal>
             <div>
               <h2 className="text-[29px] font-extrabold tracking-[-0.055em] text-slate-950 sm:text-[34px]">
                 Data Pegawai
@@ -207,7 +240,10 @@ export default function EmployeeData() {
                             Edit
                           </Link>
 
-                          <button className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700">
+                          <button
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700"
+                            onClick={() => deleteEmployee(data.id)}
+                          >
                             Delete
                           </button>
                         </TableCell>

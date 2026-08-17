@@ -21,7 +21,9 @@ import {
 import axios from "axios";
 
 import type { Department } from "@/src/types/Department";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import Modal from "@/components/Modal";
 
 export default function DepartementData() {
   const [activeNav, setActiveNav] = useState("Overview");
@@ -35,6 +37,11 @@ export default function DepartementData() {
   });
 
   const [departements, setDepartement] = useState<Department[]>([]);
+
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchDepartment = async (page: number = 1) => {
     try {
@@ -56,6 +63,29 @@ export default function DepartementData() {
     fetchDepartment();
   }, []);
 
+  const deleteDepartments = async (id: number) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/api/v1/deleteDepartments/${id}`,
+      );
+
+      setShowModal(true);
+      setMessage(res.data.message);
+
+      setTimeout(() => {
+        setShowModal(false);
+        navigate("/data_departments");
+      }, 2000);
+
+      // refresh the data
+      fetchDepartment();
+    } catch (error) {
+      console.error("Error : ", error);
+      setShowModal(true);
+      setMessage("Error, failed to delete the data!");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f7f8fb] text-slate-900">
       <Sidebar
@@ -76,6 +106,9 @@ export default function DepartementData() {
 
         <div className="mx-auto max-w-[1520px] px-5 py-7 sm:px-8 lg:px-10 lg:py-9">
           <section className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+              <p className="text-center text-gray-700">{message}</p>
+            </Modal>
             <div>
               <h2 className="text-[29px] font-extrabold tracking-[-0.055em] text-slate-950 sm:text-[34px]">
                 Data Departemen
@@ -141,7 +174,10 @@ export default function DepartementData() {
                             Edit
                           </Link>
 
-                          <button className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700">
+                          <button
+                            className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-red-500 hover:bg-red-700"
+                            onClick={() => deleteDepartments(data.id)}
+                          >
                             Delete
                           </button>
                         </TableCell>

@@ -5,14 +5,15 @@ import Footer from "../../../../components/Footer";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Modal from "../../../../components/Modal";
 
-export default function AddDepartments() {
+export default function EditDepartments() {
+  const { id } = useParams();
   const [activeNav, setActiveNav] = useState("Overview");
   const [search, setSearch] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -26,11 +27,30 @@ export default function AddDepartments() {
 
   const navigate = useNavigate();
 
-  const addDepartments = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const fetchDepartmentById = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/api/v1/departments/${id}`,
+        );
+
+        const { code, name } = res.data.data;
+
+        setCodes(code);
+        setName(name);
+      } catch (error) {
+        console.error("Error : ", error);
+      }
+    };
+
+    fetchDepartmentById();
+  }, [id]);
+
+  const editDepartments = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/v1/createDepartments",
+      const res = await axios.put(
+        `http://localhost:3000/api/v1/updateDepartments/${id}`,
         {
           code: code,
           name: name,
@@ -76,7 +96,7 @@ export default function AddDepartments() {
             </Modal>
             <div>
               <h2 className="text-[29px] font-extrabold tracking-[-0.055em] text-slate-950 sm:text-[34px]">
-                Form tambah departemen
+                Form edit departemen
               </h2>
             </div>
           </section>
@@ -84,7 +104,7 @@ export default function AddDepartments() {
           <div className="mx-auto mt-10 max-w">
             <Card>
               <CardContent>
-                <form className="space-x-4 p-6" onSubmit={addDepartments}>
+                <form className="space-x-4 p-6" onSubmit={editDepartments}>
                   <div className="mb-5">
                     <label
                       htmlFor="code"
@@ -96,6 +116,7 @@ export default function AddDepartments() {
                       type="text"
                       id="code"
                       name="code"
+                      value={code}
                       onChange={(e) => setCodes(e.target.value)}
                       className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-lg placeholder:text-body"
                       placeholder="masukan kode departemen..."
@@ -113,6 +134,7 @@ export default function AddDepartments() {
                       type="text"
                       id="name"
                       name="name"
+                      value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-lg focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-lg placeholder:text-body"
                       placeholder="masukan nama departemen..."
@@ -123,7 +145,7 @@ export default function AddDepartments() {
                     type="submit"
                     className="text-white bg-blue-500 box-border border border-transparent hover:bg-blue-700 focus:ring-4 focus:ring-brand-medium shadow-lg font-medium leading-5 rounded-lg text-sm px-4 py-2.5 focus:outline-none"
                   >
-                    Tambah!
+                    Edit!
                   </button>
                 </form>
               </CardContent>
