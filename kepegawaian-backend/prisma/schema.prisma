@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma/client"
@@ -10,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url = env("DATABASE_URL")
 }
 
 enum Role {
@@ -40,6 +36,12 @@ enum StatusPernikahan {
   Sudah_menikah
   Belum_menikah
   Cerai_mati
+}
+
+enum StatusLeaveRequest {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 model User {
@@ -79,31 +81,72 @@ model Positions {
 }
 
 model Employees {
-  id Int @id @default(autoincrement())
-  nip String @unique @db.VarChar(155)
-  full_name String @db.VarChar(155)
-
-  nik String @db.VarChar(155)
-  jenis_kelamin JenisKelamin
-
-  birth_place String @db.VarChar(155)
-  birth_Date DateTime
-
-  phone String @db.VarChar(155)
-  address String @db.Text
-
+  id               Int            @id @default(autoincrement())
+  nip              String         @unique @db.VarChar(155)
+  full_name        String         @db.VarChar(155)
+  nik              String         @db.VarChar(155)
+  jenis_kelamin    JenisKelamin
+  birth_place      String         @db.VarChar(155)
+  birth_Date       DateTime
+  phone            String         @db.VarChar(155)
+  address          String         @db.Text
   statusPernikahan StatusPernikahan
+  agama            String         @db.VarChar(155)
+  join_date        DateTime
 
-  agama String @db.VarChar(155)
+  departments   Departments @relation(fields: [departmentId], references: [id])
+  departmentId  Int
+  position_id   Int
+  positions     Positions   @relation(fields: [position_id], references: [id])
 
-  join_date DateTime
+  // Relasi
+  leave_balances leave_balances[]
+  leave_requests leave_requests[] // 👈 Pengajuan cuti pegawai
 
-  departments Departments @relation(fields: [departmentId], references: [id])
-  departmentId Int
-
-  position_id Int
-  positions Positions @relation(fields: [position_id], references: [id])
-  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Master Jenis Cuti (tidak punya relasi langsung ke Employees)
+model leave_types {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(155)
+  quota_days  Int
+
+  leave_requests leave_requests[] // 👈 Dipakai di transaksi pengajuan cuti
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Tabel Transaksi Pengajuan Cuti (Menghubungkan Employees & leave_types)
+model leave_requests {
+  id            Int      @id @default(autoincrement())
+  
+  employee_id   Int
+  employee      Employees @relation(fields: [employee_id], references: [id])
+
+  leave_type_id Int
+  leave_type    leave_types @relation(fields: [leave_type_id], references: [id])
+
+  start_date    DateTime
+  end_date      DateTime
+  reason        String    @db.Text
+  status        StatusLeaveRequest @default(PENDING) // PENDING, APPROVED, REJECTED
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model leave_balances {
+  id              Int       @id @default(autoincrement())
+  
+  employee_id     Int
+  employee        Employees @relation(fields: [employee_id], references: [id])
+
+  year            Int
+  remaining_quota Int
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }

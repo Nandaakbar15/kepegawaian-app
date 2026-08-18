@@ -25,6 +25,28 @@ const {
   updatePositions,
 } = require("../controller/positionController");
 
+const {
+  getAllLeavesTypes,
+  createLeavesTypes,
+  getLeavesTypesById,
+  updateLeavesTypes,
+  deleteLeavesTypes,
+} = require("../controller/leavesTypesController");
+const {
+  getAllLeaveRequest,
+  getLeaveRequestById,
+  createLeaveRequest,
+  deleteLeaveRequest,
+  updateLeaveRequest,
+} = require("../controller/leaveRequestController");
+const {
+  getAllLeaveBalances,
+  getLeavesBalancesById,
+  createLeaveBalances,
+  updateLeaveBalances,
+  deleteLeaveBalances,
+} = require("../controller/leaveBalancesController");
+
 router.get("/", (req, res) => {
   res.status(200).json({
     statusCode: 200,
@@ -52,5 +74,26 @@ router.get("/api/v1/positions/:id", getPositionsById);
 router.post("/api/v1/createPositions", createPositions);
 router.put("/api/v1/updatePositions/:id", updatePositions);
 router.delete("/api/v1/positions/:id", deletePositions);
+
+// routes leaves types
+router.get("/api/v1/leaveTypes", getAllLeavesTypes);
+router.get("/api/v1/leaveTypes/:id", getLeavesTypesById);
+router.post("/api/v1/createLeaveTypes", createLeavesTypes);
+router.put("/api/v1/updateLeaveTypes/:id", updateLeavesTypes);
+router.delete("/api/v1/deleteLeaveTypes/:id", deleteLeavesTypes);
+
+// routes leave request
+router.get("/api/v1/leaveRequest", getAllLeaveRequest);
+router.get("/api/v1/leaveRequest/:id", getLeaveRequestById);
+router.post("/api/v1/createLeaveRequest", createLeaveRequest);
+router.put("/api/v1/updateLeaveRequest/:id", updateLeaveRequest);
+router.delete("/api/v1/deleteLeaveRequest/:id", deleteLeaveRequest);
+
+// routes leave balances
+router.get("/api/v1/leaveBalances", getAllLeaveBalances);
+router.get("/api/v1/leaveBalances/:id", getLeavesBalancesById);
+router.post("/api/v1/createLeaveBalances", createLeaveBalances);
+router.put("/api/v1/updateLeaveBalances/:id", updateLeaveBalances);
+router.delete("/api/v1/deleteLeaveBalances/:id", deleteLeaveBalances);
 
 module.exports = router;

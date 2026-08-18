@@ -1,4 +1,13 @@
-import { Building2, ChevronDown, LayoutFreeform, Users, X } from "lucide-react";
+import {
+  Building2,
+  ChevronDown,
+  LayoutFreeform,
+  Users,
+  X,
+  CircleGauge,
+  Scale,
+  GitPullRequestArrow,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface SidebarProps {
@@ -12,6 +21,13 @@ const navItems = [
   { label: "Data Departemen", icon: Building2, link: "/data_departemen" },
   { label: "Data Posisi", icon: LayoutFreeform, link: "/data_posisi" },
   { label: "Data Pegawai", icon: Users, link: "/data_pegawai" },
+  { label: "Data Jenis Cuti", icon: CircleGauge, link: "/data_jenis_cuti" },
+  { label: "Data Sisa Cuti", icon: Scale, link: "/data_sisa_cuti" },
+  {
+    label: "Data Permintaan Cuti",
+    icon: GitPullRequestArrow,
+    link: "/data_permintaan_cuti",
+  },
 ];
 
 export default function Sidebar({

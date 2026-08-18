@@ -11,6 +11,15 @@ import AddEmployee from "./pages/Dashboard/EmployeeData/AddEmployee";
 import EditDepartments from "./pages/Dashboard/DepartmentsData/EditDepartments";
 import EditPosition from "./pages/Dashboard/PositionsData/EditPosition";
 import EditEmployee from "./pages/Dashboard/EmployeeData/EditEmployee";
+import LeaveTypesData from "./pages/Dashboard/LeaveTypesData/IndexLeaveTypesData";
+import AddLeavesTypeForm from "./pages/Dashboard/LeaveTypesData/AddLeaveTypes";
+import EditLeavesTypeForm from "./pages/Dashboard/LeaveTypesData/EditLeaveTypes";
+import LeaveRequestData from "./pages/Dashboard/LeaveRequestData/IndexLeaveRequestData";
+import LeaveBalancesData from "./pages/Dashboard/LeaveBalancesData/IndexLeaveBalancesData";
+import AddLeaveBalancesForm from "./pages/Dashboard/LeaveBalancesData/AddLeaveBalances";
+import EditLeaveBalancesForm from "./pages/Dashboard/LeaveBalancesData/EditLeaveBalances";
+import AddLeaveRequestForm from "./pages/Dashboard/LeaveRequestData/AddLeaveRequestData";
+import EditLeaveRequestForm from "./pages/Dashboard/LeaveRequestData/EditLeaveRequestData";
 
 export default function App() {
   return (
@@ -33,6 +42,27 @@ export default function App() {
         <Route path="/data_pegawai" element={<EmployeeData />} />
         <Route path="/tambah_pegawai" element={<AddEmployee />} />
         <Route path="/edit_pegawai/:id" element={<EditEmployee />} />
+
+        {/* Routes Leave Types */}
+        <Route path="/data_jenis_cuti" element={<LeaveTypesData />} />
+        <Route path="/tambah_jenis_cuti" element={<AddLeavesTypeForm />} />
+        <Route path="/edit_jenis_cuti/:id" element={<EditLeavesTypeForm />} />
+
+        {/* Routes Leave Balances */}
+        <Route path="/data_sisa_cuti" element={<LeaveBalancesData />} />
+        <Route path="/tambah_sisa_cuti" element={<AddLeaveBalancesForm />} />
+        <Route path="/edit_sisa_cuti/:id" element={<EditLeaveBalancesForm />} />
+
+        {/* Routes Leave Request */}
+        <Route path="/data_permintaan_cuti" element={<LeaveRequestData />} />
+        <Route
+          path="/tambah_permintaan_cuti"
+          element={<AddLeaveRequestForm />}
+        />
+        <Route
+          path="/edit_permintaan_cuti/:id"
+          element={<EditLeaveRequestForm />}
+        />
       </Routes>
     </BrowserRouter>
   );
