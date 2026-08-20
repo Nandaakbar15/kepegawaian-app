@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express();
+const upload = require("../lib/upload");
 
 const {
   getAllDepartments,
@@ -32,6 +33,7 @@ const {
   updateLeavesTypes,
   deleteLeavesTypes,
 } = require("../controller/leavesTypesController");
+
 const {
   getAllLeaveRequest,
   getLeaveRequestById,
@@ -39,6 +41,7 @@ const {
   deleteLeaveRequest,
   updateLeaveRequest,
 } = require("../controller/leaveRequestController");
+
 const {
   getAllLeaveBalances,
   getLeavesBalancesById,
@@ -46,6 +49,15 @@ const {
   updateLeaveBalances,
   deleteLeaveBalances,
 } = require("../controller/leaveBalancesController");
+const { login } = require("../controller/authController");
+
+const {
+  getAllEmployeeDocuments,
+  getEmployeeDocumentById,
+  createEmployeeDocument,
+  updateEmployeeDocument,
+  deleteEmployeeDocument,
+} = require("../controller/employeeDocumentController");
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -53,6 +65,9 @@ router.get("/", (req, res) => {
     message: "Kepegawaian App backend",
   });
 });
+
+// routes login
+router.post("/api/login", login);
 
 // routes departments
 router.get("/api/v1/departments", getAllDepartments);
@@ -95,5 +110,20 @@ router.get("/api/v1/leaveBalances/:id", getLeavesBalancesById);
 router.post("/api/v1/createLeaveBalances", createLeaveBalances);
 router.put("/api/v1/updateLeaveBalances/:id", updateLeaveBalances);
 router.delete("/api/v1/deleteLeaveBalances/:id", deleteLeaveBalances);
+
+// routes employee document
+router.get("/api/v1/employee_documents", getAllEmployeeDocuments);
+router.get("/api/v1/employee_documents/:id", getEmployeeDocumentById);
+router.post(
+  "/api/v1/createEmployeeDocument",
+  upload.single("file_path"),
+  createEmployeeDocument,
+);
+router.put(
+  "/api/v1/updateEmployeeDocument/:id",
+  upload.single("file_path"),
+  updateEmployeeDocument,
+);
+router.delete("/api/v1/deleteEmployeeDocument/:id", deleteEmployeeDocument);
 
 module.exports = router;

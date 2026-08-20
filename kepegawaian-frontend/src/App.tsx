@@ -20,12 +20,20 @@ import AddLeaveBalancesForm from "./pages/Dashboard/LeaveBalancesData/AddLeaveBa
 import EditLeaveBalancesForm from "./pages/Dashboard/LeaveBalancesData/EditLeaveBalances";
 import AddLeaveRequestForm from "./pages/Dashboard/LeaveRequestData/AddLeaveRequestData";
 import EditLeaveRequestForm from "./pages/Dashboard/LeaveRequestData/EditLeaveRequestData";
+import LoginPages from "./pages/LoginPages";
+import EmployeeDocumentData from "./pages/Dashboard/EmployeeDocumentsData/IndexEmployeeDocumentsData";
+import AddEmployeeDocumentsForm from "./pages/Dashboard/EmployeeDocumentsData/AddEmployeeDocuments";
+import EditEmployeeDocumentsForm from "./pages/Dashboard/EmployeeDocumentsData/EditEmployeeDocuments";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to={"/dashboard"} />} />
+        <Route path="/" element={<Navigate to={"/loginPage"} />} />
+
+        {/* Login Pages */}
+        <Route path="/loginPage" element={<LoginPages />} />
+
         <Route path="/dashboard" element={<Dashboard />} />
 
         {/* Routes departments */}
@@ -62,6 +70,20 @@ export default function App() {
         <Route
           path="/edit_permintaan_cuti/:id"
           element={<EditLeaveRequestForm />}
+        />
+
+        {/* Routes Emplyee Document */}
+        <Route
+          path="/data_dokumen_pegawai"
+          element={<EmployeeDocumentData />}
+        />
+        <Route
+          path="/tambah_dokumen_pegawai"
+          element={<AddEmployeeDocumentsForm />}
+        />
+        <Route
+          path="/edit_dokumen_pegawai/:id"
+          element={<EditEmployeeDocumentsForm />}
         />
       </Routes>
     </BrowserRouter>

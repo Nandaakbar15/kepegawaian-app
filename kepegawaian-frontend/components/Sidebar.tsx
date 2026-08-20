@@ -7,6 +7,7 @@ import {
   CircleGauge,
   Scale,
   GitPullRequestArrow,
+  FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -27,6 +28,11 @@ const navItems = [
     label: "Data Permintaan Cuti",
     icon: GitPullRequestArrow,
     link: "/data_permintaan_cuti",
+  },
+  {
+    label: "Data Dokumen Pegawai",
+    icon: FileText,
+    link: "/data_dokumen_pegawai",
   },
 ];
 

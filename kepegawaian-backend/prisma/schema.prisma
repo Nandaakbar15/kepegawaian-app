@@ -44,6 +44,13 @@ enum StatusLeaveRequest {
   REJECTED
 }
 
+enum TypeFile {
+  KTP
+  Ijazah
+  Kontrak_kerja
+  NPWP
+}
+
 model User {
   id Int @id @default(autoincrement())
   username String @db.VarChar(155)
@@ -102,6 +109,7 @@ model Employees {
   // Relasi
   leave_balances leave_balances[]
   leave_requests leave_requests[] // 👈 Pengajuan cuti pegawai
+  employee_document EmployeeDocuments[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -146,6 +154,19 @@ model leave_balances {
 
   year            Int
   remaining_quota Int
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model EmployeeDocuments {
+  id Int @id @default(autoincrement())
+
+  employee_id Int
+  employee Employees @relation(fields: [employee_id], references: [id])
+
+  type TypeFile
+  file_path String
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
