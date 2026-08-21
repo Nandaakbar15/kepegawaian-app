@@ -58,6 +58,11 @@ const {
   updateEmployeeDocument,
   deleteEmployeeDocument,
 } = require("../controller/employeeDocumentController");
+const {
+  getAllUsers,
+  getUserById,
+  deleteUser,
+} = require("../controller/userController");
 
 router.get("/", (req, res) => {
   res.status(200).json({
@@ -68,6 +73,11 @@ router.get("/", (req, res) => {
 
 // routes login
 router.post("/api/login", login);
+
+// routes users
+router.get("/api/v1/users", getAllUsers);
+router.get("/api/v1/users/:id", getUserById);
+router.delete("/api/v1/deleteUser/:id", deleteUser);
 
 // routes departments
 router.get("/api/v1/departments", getAllDepartments);

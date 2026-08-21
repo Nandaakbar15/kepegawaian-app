@@ -8,6 +8,7 @@ import {
   Scale,
   GitPullRequestArrow,
   FileText,
+  User,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -19,6 +20,7 @@ interface SidebarProps {
 }
 
 const navItems = [
+  { label: "Data Users", icon: User, link: "/users_data" },
   { label: "Data Departemen", icon: Building2, link: "/data_departemen" },
   { label: "Data Posisi", icon: LayoutFreeform, link: "/data_posisi" },
   { label: "Data Pegawai", icon: Users, link: "/data_pegawai" },

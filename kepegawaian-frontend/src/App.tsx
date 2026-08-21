@@ -24,6 +24,8 @@ import LoginPages from "./pages/LoginPages";
 import EmployeeDocumentData from "./pages/Dashboard/EmployeeDocumentsData/IndexEmployeeDocumentsData";
 import AddEmployeeDocumentsForm from "./pages/Dashboard/EmployeeDocumentsData/AddEmployeeDocuments";
 import EditEmployeeDocumentsForm from "./pages/Dashboard/EmployeeDocumentsData/EditEmployeeDocuments";
+import UserData from "./pages/Dashboard/UserData/IndexUserData";
+import DetailUser from "./pages/Dashboard/UserData/DetailUser";
 
 export default function App() {
   return (
@@ -35,6 +37,10 @@ export default function App() {
         <Route path="/loginPage" element={<LoginPages />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Routes User */}
+        <Route path="/users_data" element={<UserData />} />
+        <Route path="/detailUser/:id" element={<DetailUser />} />
 
         {/* Routes departments */}
         <Route path="/data_departemen" element={<DepartementData />} />
